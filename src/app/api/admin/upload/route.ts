@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
-import { writeFile, mkdir } from "fs/promises";
-import { join, extname } from "path";
+import { put } from "@vercel/blob";
+import { extname } from "path";
 import { randomUUID } from "crypto";
 
 export const runtime = "nodejs";
 
 const ALLOWED = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
-const MAX_SIZE = 5 * 1024 * 1024;
+const MAX_SIZE = 4 * 1024 * 1024;
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,23 +21,25 @@ export async function POST(req: NextRequest) {
     if (!list.length) return NextResponse.json({ error: "No file uploaded." }, { status: 400 });
     if (list.length > 10) return NextResponse.json({ error: "Upload max 10 images at once." }, { status: 400 });
 
-    const dir = join(process.cwd(), "public", "uploads");
-    await mkdir(dir, { recursive: true });
-
     const urls: string[] = [];
     for (const file of list) {
       if (!ALLOWED.has(file.type)) {
-        return NextResponse.json({ error: `Invalid file type: ${file.name}. Use JPG, PNG, WEBP or GIF.` }, { status: 400 });
+        return NextResponse.json(
+          { error: Invalid file type: ${file.name}. Use JPG, PNG, WEBP or GIF. },
+          { status: 400 }
+        );
       }
       if (file.size > MAX_SIZE) {
-        return NextResponse.json({ error: `${file.name} is larger than 5MB.` }, { status: 400 });
+        return NextResponse.json({ error: ${file.name} is larger than 4MB. }, { status: 400 });
       }
       const ext = extname(file.name).toLowerCase() || ".jpg";
       const safeExt = [".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(ext) ? ext : ".jpg";
-      const filename = `${Date.now()}-${randomUUID().slice(0, 8)}${safeExt}`;
-      const bytes = Buffer.from(await file.arrayBuffer());
-      await writeFile(join(dir, filename), bytes);
-      urls.push(`/uploads/${filename}`);
+      const filename = ${Date.now()}-${randomUUID().slice(0, 8)}${safeExt};
+      const blob = await put(uploads/${filename}, file, {
+        access: "public",
+        contentType: file.type,
+      });
+      urls.push(blob.url);
     }
     return NextResponse.json({ ok: true, urls });
   } catch (e) {
