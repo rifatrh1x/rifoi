@@ -25,17 +25,17 @@ export async function POST(req: NextRequest) {
     for (const file of list) {
       if (!ALLOWED.has(file.type)) {
         return NextResponse.json(
-          { error: Invalid file type: ${file.name}. Use JPG, PNG, WEBP or GIF. },
+          { error: `Invalid file type: ${file.name}. Use JPG, PNG, WEBP or GIF.` },
           { status: 400 }
         );
       }
       if (file.size > MAX_SIZE) {
-        return NextResponse.json({ error: ${file.name} is larger than 4MB. }, { status: 400 });
+        return NextResponse.json({ error: `${file.name} is larger than 4MB.` }, { status: 400 });
       }
       const ext = extname(file.name).toLowerCase() || ".jpg";
       const safeExt = [".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(ext) ? ext : ".jpg";
-      const filename = ${Date.now()}-${randomUUID().slice(0, 8)}${safeExt};
-      const blob = await put(uploads/${filename}, file, {
+      const filename = `${Date.now()}-${randomUUID().slice(0, 8)}${safeExt}`;
+      const blob = await put(`uploads/${filename}`, file, {
         access: "public",
         contentType: file.type,
       });
