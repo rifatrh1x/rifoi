@@ -1,6 +1,6 @@
 # RIFOI — Online Shopping in Bangladesh
 
-**Brand:** RIFOI — *For your needs Rifoi*
+**Brand:** RIFOI — *For your needs Rifoi ok*
 **Stack:** Next.js 16 (App Router) + TypeScript + PostgreSQL + Drizzle ORM + Tailwind CSS
 **Currency:** Bangladeshi Taka (BDT ৳) • **Language:** English (`lang="en"`)
 
