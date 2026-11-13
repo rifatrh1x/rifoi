@@ -31,7 +31,7 @@ const SETTINGS = {
   whatsappIntl: "8801312812139",
   facebookUrl: "https://www.facebook.com/share/18MBugQQsA/",
   supportPhone: "01312812139",
-  supportEmail: "support@rifoi.com",
+  supportEmail: "rifathosen24x@gmail.com",
   storeAddress: "Dhaka, Bangladesh (update from Admin → Settings)",
   deliveryDhaka: "60",
   deliveryOutside: "120",
